@@ -93,16 +93,16 @@ If you'd rather render the results yourself in some other application, you can
 use JSONP to fetch the data. Simply add a `callback=functioname` to a request
 to api.php.
 
-Example: Your dashboard is hosted at `http://example.com/open\_pull\_requests/`,
-and your callback function is called `handle\_prs`, you would want to add the following to your markup:
+Example: Your dashboard is hosted at `http://example.com/prs/`,
+and your callback function is called `handleprs`, you would want to add the following to your markup:
 
 ```
-<script type="text/javascript" src="http://example.com/open_pull_requests/api.php?callback=handle_prs"></script>
+<script type="text/javascript" src="http://example.com/prs/api.php?callback=handleprs"></script>
 ```
 
 ### Disabling JSONP
 
-If you want to turn off JSONP, set `jsonp\_enabled` to false in the configuration file
+If you want to turn off JSONP, set `jsonp_enabled` to false in the configuration file
 
 ## Development
 
