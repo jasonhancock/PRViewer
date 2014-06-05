@@ -54,11 +54,23 @@ foreach($conf['sites'] as $site) {
 }
 
 usort($pull_requests, 'cmp');
-
-header('Content-Type: application/json');
-print json_encode(array(
+$response = array(
     'pull_requests' => $pull_requests
-));
+);
+
+if(isset($_GET['callback'])) {
+    if($conf['jsonp_enabled']) {
+        header('Content-Type: application/javascript');
+        echo $_GET['callback'] . '(' . json_encode($response) . ');';
+
+    } else {
+        header('HTTP/1.0 403 Forbidden');
+        echo 'JSONP disabled in configuration';
+    }
+} else {
+    header('Content-Type: application/json');
+    print json_encode($response);
+}
 
 function cmp ($a, $b) {
     return strcmp($a['created_at'], $b['created_at']);

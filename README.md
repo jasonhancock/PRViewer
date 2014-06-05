@@ -20,8 +20,9 @@ key for the appropriate GitHub instance in `config.php`:
 <?php
 
 return array(
-    'time_zone' => 'UTC',
-    'sites'     => array(
+    'time_zone'     => 'UTC',
+    'jsonp_enabled' => true,
+    'sites'         => array(
         array(
             'name'          => 'github.com',
             'token'         => 'YOUR TOKEN GOES HERE',
@@ -49,8 +50,9 @@ the following entries:
 <?php
 
 return array(
-    'time_zone' => 'UTC',
-    'sites'     => array(
+    'time_zone'     => 'UTC',
+    'jsonp_enabled' => true,
+    'sites'         => array(
         array(
             'name'          => 'github.example.com',
             'token'         => 'YOUR TOKEN GOES HERE',
@@ -84,6 +86,23 @@ return array(
 ### Watching a specific repository
 
 ### Excluding repositories
+
+## JSONP
+
+If you'd rather render the results yourself in some other application, you can
+use JSONP to fetch the data. Simply add a `callback=functioname` to a request
+to api.php.
+
+Example: Your dashboard is hosted at `http://example.com/open\_pull\_requests/`,
+and your callback function is called `handle\_prs`, you would want to add the following to your markup:
+
+```
+<script type="text/javascript" src="http://example.com/open_pull_requests/api.php?callback=handle_prs"></script>
+```
+
+### Disabling JSONP
+
+If you want to turn off JSONP, set `jsonp\_enabled` to false in the configuration file
 
 ## Development
 

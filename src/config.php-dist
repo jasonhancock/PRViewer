@@ -1,8 +1,9 @@
 <?php
 
 return array(
-    'time_zone' => 'UTC',
-    'sites'     => array(
+    'time_zone'     => 'UTC',
+    'jsonp_enabled' => true,
+    'sites'         => array(
         array(
             'name'          => 'github.com',
             'token'         => 'YOUR TOKEN GOES HERE',
