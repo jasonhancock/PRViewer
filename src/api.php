@@ -23,45 +23,53 @@ foreach($conf['sites'] as $site) {
             if(in_array($repo_name, $site['exclude'])) {
                 continue;
             }
-            process_repo($api_pr, $org_name, $repo['name'], 'open', $site['base_url']);
+            $pull_requests = array_merge(
+                $pull_requests,
+                process_repo($api_pr, $org_name, $repo['name'], 'open', $site['base_url'])
+            );
         }
     }
 
     foreach($site['include'] as $repo_name) {
         $pieces = explode('/', $repo_name);
-        process_repo($api_pr, $pieces[0], $pieces[1], 'open', $site['base_url']);
+        $pull_requests = array_merge(
+            $pull_requests,
+            process_repo($api_pr, $pieces[0], $pieces[1], 'open', $site['base_url'])
+        );
     }
 
     foreach($site['users'] as $user) {
         $repos = $client->api('user')->repositories($user);
         foreach($repos as $repo) {
-            $repo_name = "$org_name/" . $repo['name'];
+            $repo_name = "$user/" . $repo['name'];
             if(in_array($repo_name, $site['exclude'])) {
                 continue;
             }
-            process_repo($api_pr, $user, $repo['name'], 'open', $site['base_url']);
+            $pull_requests = array_merge(
+                $pull_requests,
+                process_repo($api_pr, $user, $repo['name'], 'open', $site['base_url'])
+            );
         }
     }
 }
 
 usort($pull_requests, 'cmp');
 
+header('Content-Type: application/json');
+print json_encode(array(
+    'pull_requests' => $pull_requests
+));
+
 function cmp ($a, $b) {
     return strcmp($a['created_at'], $b['created_at']);
 }
 
 function process_repo($api, $org_name, $repo_name, $state, $base_url) {
-    global $pull_requests;
+    $pull_requests = array();
 
     $prs = $api->all($org_name, $repo_name, 'open', 1, 500);
     foreach($prs as $pr) {
         $age = time() - strtotime($pr['created_at']);
-        $class = '';
-        if($age > 86400 * 5) {
-            $class = 'danger';
-        } elseif($age > 86400 * 2) {
-            $class = 'warning';
-        }
         $pull_requests[] = array(
             'url' => $pr['html_url'],
             'created_at' => date('Y-m-d H:i:s', strtotime($pr['created_at'])),
@@ -74,9 +82,8 @@ function process_repo($api, $org_name, $repo_name, $state, $base_url) {
             'title'      => $pr['title'],
             'number'     => $pr['number'],
             'age'        => $age,
-            'class'      => $class,
         );
     }
-}
 
-include 'view.php';
+    return $pull_requests;
+}

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="prApp">
+    <head>
+        <title>Open Pull Requests</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+
+        <style type="text/css">
+            body {
+                padding-top: 20px;
+                padding-bottom: 20px;
+            }
+
+            .header,
+            .footer {
+                padding-right: 15px;
+                padding-left: 15px;
+            }
+
+            .header h3 {
+                padding-bottom: 19px;
+                margin-top: 0;
+                margin-bottom: 0;
+                line-height: 40px;
+            }
+
+            .footer {
+                padding-top: 19px;
+                color: #777;
+                font-size: .8em;
+                text-align: right;
+            }
+
+            table {
+                margin-top: 20px;
+                margin-bottom: 20px;
+                font-size: .9em;
+            }
+        </style>
+    </head>
+    <body ng-controller="prCtrl">
+
+        <div class="container">
+            <div class="header">
+                <h3 class="text-muted">Open Pull Requests</h3>
+            </div>
+
+            <div ng-show="loading" style="text-align: center; margin: 150px">
+            <i class="fa fa-refresh fa-spin fa-5x text-muted"></i>
+            </div>
+
+            <table class="table table-striped" ng-hide="loading">
+                <tr>
+                    <th>#</th>
+                    <th>Repository</th>
+                    <th>Description</th>
+                    <th>Opened By</th>
+                    <th>Created</th>
+                    <th>Updated</th>
+                </tr>
+
+                <tr ng-repeat="pr in pull_requests" class="{{pr.class}}">
+                    <td><a href="{{pr.url}}" target="_blank">{{pr.number}}</a></td>
+                    <td><a href="{{pr.org_url}}" target="_blank">{{pr.org}}</a>/<a href="{{pr.repo_url}}" target="_blank">{{pr.repo}}</a></td>
+                    <td>{{pr.title}}</td>
+                    <td>{{pr.user}}</td>
+                    <td>{{pr.created_at}}</td>
+                    <td>{{pr.updated_at}}</td>
+                </tr>
+            </table>
+
+            <div class="footer">
+                <p>&copy; 2014 <a href="http://geek.jasonhancock.com">Jason Hancock</a></p>
+            </div>
+        </div>
+
+    <script type="text/javascript" src="//code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular.min.js"></script>
+    <script type="text/javascript">
+    'use strict';
+
+    var prApp = angular.module('prApp', []);
+
+    prApp.controller('prCtrl', function($scope, $http) {
+        $scope.loading = true;
+        $http.get('api.php').success(function(data) {
+            $scope.pull_requests = data.pull_requests;
+            $.each($scope.pull_requests, function(index,value) {
+                value.class = '';
+                if(value.age > 86400 * 5) {
+                    value.class = 'danger';
+                } else if (value.age > 86400 * 4) {
+                    value.class = 'warning';
+                }
+            });
+            $scope.loading = false;
+        });
+    });
+
+    </script>
+
+    </body>
+</html>
