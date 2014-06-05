@@ -1,0 +1,19 @@
+<?php
+
+return array(
+    'time_zone' => 'UTC',
+    'sites'     => array(
+        array(
+            'name'          => 'github.com',
+            'token'         => 'YOUR TOKEN GOES HERE',
+            'api_url'       => 'https://api.github.com/',
+            'base_url'      => 'https://github.com/',
+            'organizations' => array(),
+            'exclude'       => array(),
+            'include'       => array(),
+            'users'         => array(
+                'YOUR USERNAME GOES HERE'
+            ),
+        ),
+    ),
+);
