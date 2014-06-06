@@ -3,8 +3,6 @@
 A simple tool to display open pull requests across organizations, users, or
 individual repositories.
 
-## Installation
-
 ## Configuration
 
 Copy `config.php-dist` to `config.php`.
@@ -81,11 +79,48 @@ return array(
 
 ### Watching an Organization
 
+Add the name of an Organization to the `organizations` array of a site to
+query all repositories in that organization for pull requests. Example:
+
+```
+'organizations' => array(
+    'github'
+),
+```
+
 ### Watching a User
+
+Add the username of a user to the `users` array to query all repositories
+owned by that user. Example:
+
+```
+'users' => array(
+    'jasonhancock'
+),
+```
 
 ### Watching a specific repository
 
+To watch only a specific repository, add both the organization/user name and
+the name of the repository to the `include` array. Example:
+
+```
+'include' => array(
+    'libwww-perl/libwww-perl'
+),
+```
+
 ### Excluding repositories
+
+If you've included an organization or user, you may wish to exclude individual
+repositories. Do this by adding the organization/user name and name of the
+repository to the `exclude` array. Example:
+
+```
+'exclude` => array(
+    'ruby/rake'
+),
+```
 
 ## JSONP
 
@@ -103,10 +138,6 @@ and your callback function is called `handleprs`, you would want to add the foll
 ### Disabling JSONP
 
 If you want to turn off JSONP, set `jsonp _ enabled` to false in the configuration file
-
-## Development
-
-## Contributing
 
 ## License: MIT
 
