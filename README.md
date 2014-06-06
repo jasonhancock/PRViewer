@@ -102,7 +102,7 @@ and your callback function is called `handleprs`, you would want to add the foll
 
 ### Disabling JSONP
 
-If you want to turn off JSONP, set `jsonp_enabled` to false in the configuration file
+If you want to turn off JSONP, set `jsonp _ enabled` to false in the configuration file
 
 ## Development
 
